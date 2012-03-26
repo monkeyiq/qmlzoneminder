@@ -585,6 +585,8 @@ Rectangle {
 	earl = earl + "&action=vframe";
 	earl = earl + "&eid=" + eventid;
 	earl = earl + "&frame=" + frame;
+	earl = earl + "&width=" + eventView.width;
+	earl = earl + "&height=" + eventView.height;
 	earl = earl + "&foo=bar"
 	console.log("URL:    " + earl );
 	eventView.source = earl;
@@ -603,6 +605,8 @@ Rectangle {
 	earl = earl + "&monitor=" + monitorid;
 	earl = earl + "&vcodec=mjpeg";
 	earl = earl + "&fps=0";
+	earl = earl + "&width=" + preview.width;
+	earl = earl + "&height=" + preview.height;
 	earl = earl + "&foo=bar"
 	console.log( "play URL:   " + earl );
 
