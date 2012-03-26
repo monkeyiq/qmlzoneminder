@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Name=Zoneminder
+Exec=/home/user/qmlzoneminder/run.sh
+Icon=/home/user/qmlzoneminder/icon.png
+X-Window-Icon=/home/user/qmlzoneminder/icon.png
+X-Window-Icon-Dimmed=/home/user/qmlzoneminder/icon.png
