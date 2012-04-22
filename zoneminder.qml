@@ -207,7 +207,7 @@ Rectangle {
 	Timer {
 	    id: playEventTimer
             interval: 1000; running: false; repeat: true
-            onTriggered: { onPlayEventTimer(); }
+            onTriggered: { onPlayEventTimer( false ); }
 	}
 
 	MouseArea { anchors.fill:parent; }
@@ -254,8 +254,8 @@ Rectangle {
 		onClicked: { 
 		    playEventTimer.running = false;
 		    events.visible = false; 
-		    currentmonitorimgtimer.running = true;
 		    eventView.source = "";
+		    currentmonitorimgtimer.running = true;
 		}
 	    }
 	}
@@ -474,6 +474,7 @@ Rectangle {
 	z: 20
 	Text { 
 	    id: statuscount
+	    visible : false
 	    text: "        " 
 	    color: "#ddddaa"
 	    font.pixelSize: 22
@@ -504,7 +505,11 @@ Rectangle {
 	Timer {
 	    id: currentmonitorimgtimer
             interval: 2000; running: true; repeat: true
-            onTriggered: { updateCurrentCameraView(); }
+            onTriggered: { updateCurrentCameraView( false ); }
+	}
+	Timer {
+            interval: 30000; running: true; repeat: true
+            onTriggered: { updateCameraList(); }
 	}
     }
 
@@ -538,7 +543,7 @@ Rectangle {
     {
 	var monitorid = resultsModel.get(x).id;
 	currentMonitorID.text = monitorid;
-	updateCurrentCameraView();
+	updateCurrentCameraView( true );
     }
 
     function viewEvents( x ) 
@@ -566,11 +571,11 @@ Rectangle {
 	eventListCurrentFrame.text = 0;
 	eventListTotalFrames.text = frames;
 	eventListFramesIncrement.text = fps;
-	onPlayEventTimer();
+	onPlayEventTimer( true );
 	playEventTimer.running = true;
     }
 
-    function onPlayEventTimer() 
+    function onPlayEventTimer( force ) 
     {
 	var eventid   = eventListCurrentEventID.text;
 	var frame     = Math.floor(eventListCurrentFrame.text);
@@ -578,6 +583,8 @@ Rectangle {
 	if( frame > eventListTotalFrames.text )
 	    frame = 0;
 	eventListCurrentFrame.text = frame;
+	if( !force && eventView.status != Image.Ready )
+	    return;
 
  	var earl      = serverURL.text + "/index.php";
 	earl = earl + "?skin=xml";
@@ -592,7 +599,7 @@ Rectangle {
 	eventView.source = earl;
     }
 
-    function updateCurrentCameraView() 
+    function updateCurrentCameraView( force ) 
     {
 	var monitorid = currentMonitorID.text;
 	if( monitorid == "" )
@@ -616,6 +623,9 @@ Rectangle {
 		function(data) {
 		    busy.on = false;
 //		    console.log('ok', 'data:' + data)
+
+		    if( !force && preview.status != Image.Ready )
+			return;
 
 		    // "liveStream" src="
 		    var img = data.match(/liveStream" src="([^"]*)"/m)[1];

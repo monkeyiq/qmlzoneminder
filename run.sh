@@ -1,4 +1,5 @@
 #!/bin/sh
 cd ~/qmlzoneminder
-./qmlviewer -frameless -fullscreen zoneminder.qml 
+. ~/bin/intranet-source
+$SOCKS ./qmlviewer -frameless -fullscreen zoneminder.qml 
 
